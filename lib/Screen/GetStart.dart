@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:report_app/Components/Constant.dart';
+import 'package:report_app/Screen/LoginScreen.dart';
+import 'package:report_app/Screen/RegisterScreen.dart';
+import '../Components/Constant.dart';
+import '../Components/PrimaryButton.dart';
 
 class GetStart extends StatelessWidget {
   @override
@@ -42,6 +45,55 @@ class GetStart extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Center(
+                    child: Text(
+                      "The app allow user to track the task \n and inspect the task.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  PrimaryButton(
+                    text: 'Create new account',
+                    press: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegisterScreen(),
+                        ),
+                      );
+                    },
+                    color: kPrimaryColor,
+                    textColor: inputBackgroundColor,
+                    borderColor: kPrimaryColor,
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  PrimaryButton(
+                    text: 'Sign in',
+                    press: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                      );
+                    },
+                    color: inputBackgroundColor,
+                    textColor: kPrimaryColor,
+                    borderColor: kPrimaryColor,
                   ),
                 ],
               ),
