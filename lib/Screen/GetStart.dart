@@ -10,19 +10,6 @@ class GetStart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(
-          color: Colors.black,
-        ),
-        title: Text(
-          "Profile",
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        elevation: 0.0,
-        backgroundColor: inputBackgroundColor,
-      ),
       body: Container(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

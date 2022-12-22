@@ -4,11 +4,12 @@ class DropDown extends StatelessWidget {
   var _value;
   final String hintText;
   final List item;
-
+  final ValueChanged onChanged;
   DropDown({
     super.key,
     required this.hintText,
     required this.item,
+    required this.onChanged,
   });
 
   @override
@@ -21,8 +22,14 @@ class DropDown extends StatelessWidget {
       ),
       child: DropdownButtonFormField(
         decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.blueGrey.withOpacity(0.1),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              style: BorderStyle.none,
+              color: Colors.white,
+            ),
           ),
         ),
         value: _value,
@@ -30,7 +37,7 @@ class DropDown extends StatelessWidget {
           hintText,
           style: TextStyle(
             fontSize: 14,
-            color: Colors.grey,
+            color: Colors.black87,
           ),
         ),
         items: item.map((valueItem) {
@@ -45,7 +52,7 @@ class DropDown extends StatelessWidget {
             value: valueItem,
           );
         }).toList(),
-        onChanged: (value) {},
+        onChanged: onChanged,
       ),
     );
   }

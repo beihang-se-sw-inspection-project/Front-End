@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:report_app/Screen/GetStart.dart';
 import 'package:report_app/Screen/LoginScreen.dart';
 import 'package:report_app/Screen/MainScreen.dart';
 import 'package:report_app/Screen/RegisterScreen.dart';
 import 'package:report_app/Screen/SplashScreen.dart';
 
-import 'Screen/HomeScreen.dart';
+import 'Service/share_pref_service.dart';
+import 'di/configure.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  configureDependencies();
   runApp(const MyApp());
 }
 
@@ -37,12 +41,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final SharePrefService sharePrefService = getIt.get();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+      Scaffold(
         body: Container(
-          child: MainScreen(),
+          child: sharePrefService.getAccessToken().isNotEmpty ? MainScreen() : GetStart(),
         ),
     );
   }

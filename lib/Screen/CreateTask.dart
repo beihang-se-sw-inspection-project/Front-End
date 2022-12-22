@@ -1,47 +1,22 @@
-import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:report_app/Components/PasswordInputField.dart';
+import 'package:report_app/Components/DateInput.dart';
+import 'package:report_app/Components/Dropdown.dart';
 import 'package:report_app/Components/RoundInput.dart';
-import 'package:report_app/Model/login_req.dart';
 
 import '../Components/Constant.dart';
 import '../Components/PrimaryButton.dart';
-import '../Service/api_call_handler.dart';
-import '../Service/api_service.dart';
-import '../Service/error_throwable.dart';
-import '../Service/share_pref_service.dart';
-import '../di/configure.dart';
 
-class LoginScreen extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final ApiService _apiService = getIt.get();
-  final SharePrefService sharePrefService = getIt.get();
-  void login(context) async {
-    final loginReq = LoginReq(
-      LoginDataReq(
-        'auth',
-        LoginDataAttrReq(
-          emailController.text,
-          passwordController.text,
-        ),
-      ),
-    );
-    final caller = _apiService.login(loginReq);
-    final callHelper = ApiCallHandler(caller);
-    try {
-      final response = await callHelper.execute();
-      await sharePrefService.setAccessToken(response.data.attributes.accessToken);
-      Navigator.of(context).pushNamed('/main');
-    } catch (e) {
-      if (e is ErrorThrowable) {
-        debugPrint("ERROR ${e.message}");
-      }
-    }
+class CreateTask extends StatefulWidget {
+  _createTask createState() => _createTask();
+}
 
+class _createTask extends State<CreateTask> {
+  final TextEditingController deadlineController = TextEditingController();
+  final TextEditingController priorityController = TextEditingController();
+  final TextEditingController taskDetailController = TextEditingController();
 
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +25,7 @@ class LoginScreen extends StatelessWidget {
           color: Colors.black,
         ),
         title: Text(
-          "Profile",
+          "Create Project",
           style: TextStyle(
             color: Colors.black,
           ),
@@ -64,7 +39,7 @@ class LoginScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
-                child: SvgPicture.asset("asset/image/register_logo.svg"),
+                child: SvgPicture.asset("asset/image/task_icon.svg"),
               ),
               SizedBox(
                 height: 25,
@@ -74,7 +49,7 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     Center(
                       child: Text(
-                        "Sign Up",
+                        "Create your tasks",
                         style: TextStyle(
                           fontFamily: 'Roboto',
                           fontSize: 24,
@@ -87,7 +62,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     Center(
                       child: Text(
-                        "Enter your username email role and \n password",
+                        "Set the status of your task",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Roboto',
@@ -100,26 +75,48 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(
                       height: 25,
                     ),
-                    RoundInput(
-                      hintText: "Enter your email",
-                      controller: emailController,
-                      onChanged: (val) {},
-                      type: TextInputType.text,
+                    DateInput(
+                      controller: deadlineController,
                       color: Colors.black,
+                      onPress: () async {
+                        DateTime? pickeddate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2000),
+                          lastDate: DateTime(2101),
+                        );
+                        if (pickeddate != null) {
+                          setState(
+                                () {
+                              deadlineController.text =
+                                  DateFormat('yyyy/MM/dd').format(pickeddate);
+                            },
+                          );
+                        }
+                      },
                     ),
-                    PasswordInputField(
-                      hideText: "Password",
+                    // DropDown(
+                    //   hintText: "Priority",
+                    //   item: [
+                    //     'High',
+                    //     'Low',
+                    //     'Medium',
+                    //   ],
+                    // ),
+                    RoundInput(
+                      hintText: "Report",
+                      controller: taskDetailController,
                       onChanged: (val) {},
-                      onPress: () {},
-                      controller: passwordController,
+                      type: TextInputType.multiline,
+                      color: Colors.black,
                     ),
                     SizedBox(
                       height: 25,
                     ),
                     PrimaryButton(
-                      text: 'Sign in',
+                      text: 'Submit',
                       press: () {
-                        login(context);
+                        Navigator.of(context).pushNamed('/main');
                       },
                       color: kPrimaryColor,
                       textColor: inputBackgroundColor,

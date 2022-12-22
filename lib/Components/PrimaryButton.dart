@@ -18,14 +18,13 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width / 4;
     return Container(
+      width: MediaQuery.of(context).size.width * .7,
       child: ElevatedButton(
         style: TextButton.styleFrom(
             backgroundColor: color,
             alignment: Alignment.center,
             padding: EdgeInsets.symmetric(
-              horizontal: screenWidth,
               vertical: 18.0,
             ),
             shape: RoundedRectangleBorder(

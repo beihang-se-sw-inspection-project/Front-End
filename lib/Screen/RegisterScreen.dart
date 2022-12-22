@@ -4,17 +4,54 @@ import 'package:flutter_svg/svg.dart';
 import 'package:report_app/Components/Dropdown.dart';
 import 'package:report_app/Components/PasswordInputField.dart';
 import 'package:report_app/Components/RoundInput.dart';
+import 'package:report_app/Model/register_req.dart';
 import 'package:report_app/Screen/HomeScreen.dart';
 import 'package:report_app/Screen/MainScreen.dart';
+import 'package:report_app/Service/error_throwable.dart';
+import 'package:report_app/Service/share_pref_service.dart';
 
 import '../Components/Constant.dart';
 import '../Components/PrimaryButton.dart';
+import '../Service/api_call_handler.dart';
+import '../Service/api_service.dart';
+import '../di/configure.dart';
 
 class RegisterScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController roleController = TextEditingController();
   bool isShow = true;
+  final ApiService _apiService = getIt.get();
+  final SharePrefService sharePrefService = getIt.get();
+
+  void register(context) async {
+    debugPrint("rolecontroller: ${roleController.text}");
+    final registerReq = RegisterReq(
+      RegisterDataReq(
+        'users',
+        RegisterDataAttrReq(
+          usernameController.text,
+          emailController.text,
+          passwordController.text,
+          roleController.text,
+          passwordController.text,
+        ),
+      ),
+    );
+    final caller = _apiService.register(registerReq);
+    final callHelper = ApiCallHandler(caller);
+    try {
+      final response = await callHelper.execute();
+      await sharePrefService
+          .setAccessToken(response.data.attributes.accessToken);
+      Navigator.of(context).pushNamed('/main');
+    } catch (e) {
+      if (e is ErrorThrowable) {
+        debugPrint("ERROR ${e.message}");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,22 +132,22 @@ class RegisterScreen extends StatelessWidget {
                       controller: passwordController,
                     ),
                     DropDown(
-                      hintText: "Selet the role",
+                      hintText: "Select the role",
                       item: [
                         'Manger',
                         'Developer',
                         'inspector',
                       ],
+                      onChanged: (value) {
+                        roleController.text = value;
+                      },
                     ),
                     SizedBox(
                       height: 25,
                     ),
                     PrimaryButton(
                       text: 'Get Start',
-                      press: () {
-                        Navigator.of(context)
-                            .pushNamed('/main');
-                      },
+                      press: () => register(context),
                       color: kPrimaryColor,
                       textColor: inputBackgroundColor,
                       borderColor: kPrimaryColor,

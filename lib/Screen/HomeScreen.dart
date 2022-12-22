@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:report_app/Components/Constant.dart';
 import 'package:report_app/Components/ProjectRoundCard.dart';
+import 'package:report_app/Screen/CreateTask.dart';
+
+import 'ProjectDetail.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -27,10 +30,16 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 ProjectRoundCard(
-                  title: "Login",
-                  description: "task: 1",
-                  date: "1/11/2022",
-                ),
+                    title: "Login",
+                    description: "task: 1",
+                    date: "1/11/2022",
+                    onPress: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProjectDetail()),
+                      );
+                    }),
                 ProjectRoundCard(
                   title: "Login",
                   description: "task: 1",
@@ -63,7 +72,12 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Add your onPressed code here!
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CreateTask(),
+            ),
+          );
         },
         backgroundColor: kPrimaryColor,
         child: const Icon(Icons.add),
