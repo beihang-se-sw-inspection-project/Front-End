@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:report_app/Components/PasswordInputField.dart';
 import 'package:report_app/Components/RoundInput.dart';
 import 'package:report_app/Model/login_req.dart';
+import 'package:report_app/Screen/MainScreen.dart';
 
 import '../Components/Constant.dart';
 import '../Components/PrimaryButton.dart';
@@ -18,6 +19,7 @@ class LoginScreen extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final ApiService _apiService = getIt.get();
   final SharePrefService sharePrefService = getIt.get();
+
   void login(context) async {
     final loginReq = LoginReq(
       LoginDataReq(
@@ -32,16 +34,31 @@ class LoginScreen extends StatelessWidget {
     final callHelper = ApiCallHandler(caller);
     try {
       final response = await callHelper.execute();
-      await sharePrefService.setAccessToken(response.data.attributes.accessToken);
-      Navigator.of(context).pushNamed('/main');
+      await sharePrefService
+          .setAccessToken(response.data.attributes.accessToken);
+      await sharePrefService.setRole(response.data.attributes.role);
+      await sharePrefService.setUsername(response.data.attributes.name);
+      await sharePrefService.setEmail(response.data.attributes.email);
+      print(sharePrefService.getAccessToken ());
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MainScreen(),
+        ),
+      );
     } catch (e) {
       if (e is ErrorThrowable) {
+        final snackBar = SnackBar(
+          content: Text(e.errorRes?.getConcatError() ?? "System error"),
+          backgroundColor: Colors.red,
+        );
+
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
         debugPrint("ERROR ${e.message}");
       }
     }
-
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +67,7 @@ class LoginScreen extends StatelessWidget {
           color: Colors.black,
         ),
         title: Text(
-          "Profile",
+          "Sign in",
           style: TextStyle(
             color: Colors.black,
           ),
@@ -74,7 +91,7 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     Center(
                       child: Text(
-                        "Sign Up",
+                        "Sign In",
                         style: TextStyle(
                           fontFamily: 'Roboto',
                           fontSize: 24,

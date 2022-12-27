@@ -30,8 +30,9 @@ class PasswordInputField extends StatelessWidget {
           fontSize: 14,
         ),
         decoration: InputDecoration(
-          hintText: hideText,//LocaleKeys.password.tr(),
+          hintText: hideText,
           border: InputBorder.none,
+
         ),
       ),
     );

@@ -45,7 +45,15 @@ class RegisterScreen extends StatelessWidget {
       final response = await callHelper.execute();
       await sharePrefService
           .setAccessToken(response.data.attributes.accessToken);
-      Navigator.of(context).pushNamed('/main');
+      await sharePrefService.setRole(response.data.attributes.role);
+      await sharePrefService.setUsername(response.data.attributes.name);
+      await sharePrefService.setEmail(response.data.attributes.email);
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MainScreen(),
+        ),
+      );
     } catch (e) {
       if (e is ErrorThrowable) {
         debugPrint("ERROR ${e.message}");
@@ -134,7 +142,7 @@ class RegisterScreen extends StatelessWidget {
                     DropDown(
                       hintText: "Select the role",
                       item: [
-                        'Manger',
+                        'Manager',
                         'Developer',
                         'inspector',
                       ],

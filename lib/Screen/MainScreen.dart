@@ -4,6 +4,7 @@ import 'package:report_app/Screen/AboutUs.dart';
 import 'package:report_app/Screen/Dashboard.dart';
 import 'package:report_app/Screen/GetStart.dart';
 import 'package:report_app/Screen/HomeScreen.dart';
+import 'package:report_app/Screen/LogoutScreen.dart';
 
 import '../Components/Constant.dart';
 import 'Report.dart';
@@ -35,6 +36,7 @@ class _MainScreen extends State<MainScreen> {
       appBar: AppBar(
         titleSpacing: 14.0,
         backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
         title: Text(
           "Report App",
           style: TextStyle(
@@ -50,7 +52,7 @@ class _MainScreen extends State<MainScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => GetStart(),
+                  builder: (context) => LogoutScreen(),
                 ),
               );
             },
@@ -80,12 +82,12 @@ class _MainScreen extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.report),
-            label: "Dashboard",
+            label: "Report",
             backgroundColor: kPrimaryColor,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.info),
-            label: "Dashboard",
+            icon: Icon(Icons.people),
+            label: "About Us",
             backgroundColor: kPrimaryColor,
           ),
         ],

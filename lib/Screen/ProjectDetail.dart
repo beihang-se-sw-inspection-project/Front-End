@@ -1,10 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:report_app/Components/PrimaryButton.dart';
+import 'package:report_app/Screen/CreateTask.dart';
 
 import '../Components/Constant.dart';
+import '../Model/project_list_req.dart';
+import '../Service/share_pref_service.dart';
+import '../di/configure.dart';
 
 class ProjectDetail extends StatelessWidget {
+  final ProjectDataAttrReq projectData;
+  final ProjectDataReq project;
+  final SharePrefService sharePrefService = getIt.get();
+
+  ProjectDetail({super.key, required this.projectData, required this.project});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +48,7 @@ class ProjectDetail extends StatelessWidget {
                 vertical: 24.0,
               ),
               child: Text(
-                "Project",
+                projectData.project_name,
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -66,7 +77,7 @@ class ProjectDetail extends StatelessWidget {
                     width: 10.0,
                   ),
                   Text(
-                    "21 Jan 2023 - 22 Jan 2023",
+                    projectData.date,
                     style: TextStyle(
                       color: kPrimaryColor,
                       fontSize: 14,
@@ -100,7 +111,7 @@ class ProjectDetail extends StatelessWidget {
                     width: 10.0,
                   ),
                   Text(
-                    "Simon",
+                    projectData.project_manager,
                     style: TextStyle(
                       color: kPrimaryColor,
                       fontSize: 14,
@@ -112,7 +123,6 @@ class ProjectDetail extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 10.0,
-
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +144,7 @@ class ProjectDetail extends StatelessWidget {
                     width: 10.0,
                   ),
                   Text(
-                    "Koung",
+                    projectData.assignee,
                     style: TextStyle(
                       color: kPrimaryColor,
                       fontSize: 14,
@@ -168,7 +178,7 @@ class ProjectDetail extends StatelessWidget {
                     width: 10.0,
                   ),
                   Text(
-                    "High",
+                    projectData.priority,
                     style: TextStyle(
                       color: kPrimaryColor,
                       fontSize: 14,
@@ -196,11 +206,62 @@ class ProjectDetail extends StatelessWidget {
                 vertical: 5.0,
               ),
               child: Text(
-                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                projectData.overview,
                 style: TextStyle(
                   fontSize: 14,
                 ),
               ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10.0,
+                vertical: 10.0,
+              ),
+              child: Text(
+                "To Do",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10.0,
+                vertical: 5.0,
+              ),
+              child: Text(
+                projectData.to_do,
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            Center(
+              child: sharePrefService.getRole() == "inspector"
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: PrimaryButton(
+                        width: MediaQuery.of(context).size.width * .9,
+                        text: "CreateTask",
+                        press: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CreateTask(
+                                projectId: project.id,
+                                project_manager: projectData.project_manager,
+                                inspector: projectData.assignee,
+                              ),
+                            ),
+                          );
+                        },
+                        color: kPrimaryColor,
+                        textColor: Colors.white,
+                        borderColor: inputBackgroundColor,
+                      ),
+                    )
+                  : null,
             ),
           ],
         ),

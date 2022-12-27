@@ -1,39 +1,43 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:report_app/Components/DateInput.dart';
 import 'package:report_app/Components/Dropdown.dart';
 import 'package:report_app/Components/RoundInput.dart';
-import 'package:report_app/Model/create_report_req.dart';
+import 'package:report_app/Model/create_task_req.dart';
+import 'package:report_app/Model/update_task_req.dart';
 
 import '../Components/Constant.dart';
 import '../Components/PrimaryButton.dart';
-import '../Model/update_task_req.dart';
 import '../Service/api_call_handler.dart';
 import '../Service/api_service.dart';
 import '../Service/error_throwable.dart';
 import '../Service/share_pref_service.dart';
 import '../di/configure.dart';
 
-class CreateReport extends StatefulWidget {
+class UpdateStatus extends StatefulWidget {
+  final String projectId;
   final String taskId;
 
-  const CreateReport({
+  const UpdateStatus({
     super.key,
+    required this.projectId,
     required this.taskId,
   });
 
-  _createReport createState() => _createReport(
-        taskId,
-      );
+  _updateStatus createState() => _updateStatus(projectId, taskId);
 }
 
-class _createReport extends State<CreateReport> {
+class _updateStatus extends State<UpdateStatus> {
   final TextEditingController statusController = TextEditingController();
-  final TextEditingController taskReportController = TextEditingController();
+
   final ApiService _apiService = getIt.get();
   final SharePrefService sharePrefService = getIt.get();
+  final String projectId;
   final String taskId;
 
-  _createReport(
+  _updateStatus(
+    this.projectId,
     this.taskId,
   );
 
@@ -45,7 +49,7 @@ class _createReport extends State<CreateReport> {
         UpdateTaskDataAttrReq(
           taskId,
           statusController.text,
-          taskReportController.text,
+          "task",
         ),
       ),
     );
@@ -54,7 +58,7 @@ class _createReport extends State<CreateReport> {
     final callHelper = ApiCallHandler(caller);
     try {
       final response = await callHelper.execute();
-      Navigator.popUntil(context, ModalRoute.withName('/report'));
+      Navigator.pop(context);
     } catch (e) {
       if (e is ErrorThrowable) {
         debugPrint("ERROR ${e.message}");
@@ -70,7 +74,7 @@ class _createReport extends State<CreateReport> {
           color: Colors.black,
         ),
         title: Text(
-          "Create Project",
+          "Update your Status",
           style: TextStyle(
             color: Colors.black,
           ),
@@ -84,7 +88,7 @@ class _createReport extends State<CreateReport> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Center(
-                child: SvgPicture.asset("asset/image/report_icon.svg"),
+                child: SvgPicture.asset("asset/image/task_icon.svg"),
               ),
               SizedBox(
                 height: 25,
@@ -94,7 +98,7 @@ class _createReport extends State<CreateReport> {
                   children: [
                     Center(
                       child: Text(
-                        "Inspection",
+                        "Update your task",
                         style: TextStyle(
                           fontFamily: 'Roboto',
                           fontSize: 24,
@@ -107,7 +111,7 @@ class _createReport extends State<CreateReport> {
                     ),
                     Center(
                       child: Text(
-                        "report the task is it correct or still \nhave bug",
+                        "Update your Status by task",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'Roboto',
@@ -123,26 +127,17 @@ class _createReport extends State<CreateReport> {
                     DropDown(
                       hintText: "Status",
                       item: [
-                        'Approve',
-                        'Bug',
+                        'Complete',
+                        'In progress',
+                        'To Do',
                       ],
                       onChanged: (value) {
                         statusController.text = value;
                       },
                     ),
-                    RoundInput(
-                      hintText: "Report",
-                      controller: taskReportController,
-                      onChanged: (val) {},
-                      type: TextInputType.multiline,
-                      color: Colors.black,
-                    ),
-                    SizedBox(
-                      height: 25,
-                    ),
                     PrimaryButton(
                       text: 'Submit',
-                      press: () async {
+                      press: () {
                         updateTask(context);
                       },
                       color: kPrimaryColor,

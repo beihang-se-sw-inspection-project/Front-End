@@ -7,6 +7,7 @@ class PrimaryButton extends StatelessWidget {
   final VoidCallback press;
   final Color color, textColor;
   final Color borderColor;
+  final double? width;
 
   PrimaryButton({
     required this.text,
@@ -14,12 +15,13 @@ class PrimaryButton extends StatelessWidget {
     required this.color,
     required this.textColor,
     required this.borderColor,
+    this.width,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * .7,
+      width: width != null ? width : MediaQuery.of(context).size.width * .7,
       child: ElevatedButton(
         style: TextButton.styleFrom(
             backgroundColor: color,

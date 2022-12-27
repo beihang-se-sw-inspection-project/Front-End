@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:report_app/Model/error_res.dart';
 
 import 'error_throwable.dart';
 
@@ -14,7 +15,7 @@ class ApiCallHandler<T> {
 
   Future<T> execute() {
     _caller.then(_completer.complete).catchError(
-      (error) {
+          (error) {
         if (error is DioError) {
           switch (error.type) {
             case DioErrorType.connectTimeout:
@@ -47,14 +48,8 @@ class ApiCallHandler<T> {
             case DioErrorType.response:
               final retError = ErrorThrowable(error.response?.statusCode);
               retError.message = error.response?.statusMessage;
-              switch (retError.code) {
-                case HttpStatus.unauthorized:
-                  // handle unauthorized
-                  break;
-                case HttpStatus.forbidden:
-                  var hasErrorMessage = false;
-                  // handle forbidden error
-                  break;
+              if (retError.code != null && retError.code! > 299) {
+                retError.errorRes = ErrorRes.fromJson(error.response?.data);
               }
               _completer.completeError(retError);
               break;

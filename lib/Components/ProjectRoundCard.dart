@@ -49,7 +49,11 @@ class ProjectRoundCard extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
+                    overflow: TextOverflow.ellipsis,
                   ),
+                ),
+                SizedBox(
+                  height: 12.0,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

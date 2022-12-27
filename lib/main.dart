@@ -3,6 +3,7 @@ import 'package:report_app/Screen/GetStart.dart';
 import 'package:report_app/Screen/LoginScreen.dart';
 import 'package:report_app/Screen/MainScreen.dart';
 import 'package:report_app/Screen/RegisterScreen.dart';
+import 'package:report_app/Screen/Report.dart';
 import 'package:report_app/Screen/SplashScreen.dart';
 
 import 'Service/share_pref_service.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         "/login": (context) => LoginScreen(),
         "/register": (context) => RegisterScreen(),
         "/main": (context) => MainScreen(),
+        "/report": (context) => Report(),
       },
       home: SplashScreen(),
     );
