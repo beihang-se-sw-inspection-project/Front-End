@@ -54,7 +54,7 @@ class _createReport extends State<CreateReport> {
     final callHelper = ApiCallHandler(caller);
     try {
       final response = await callHelper.execute();
-      Navigator.popUntil(context, ModalRoute.withName('/report'));
+      Navigator.pop(context);
     } catch (e) {
       if (e is ErrorThrowable) {
         debugPrint("ERROR ${e.message}");
